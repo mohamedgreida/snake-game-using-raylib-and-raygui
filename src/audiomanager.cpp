@@ -22,9 +22,9 @@ void AudioManager::LoadSoundEffect(const std::string& key, const std::string& fi
 void AudioManager::PlaySoundEffect(const std::string& key) {
     if (sounds.find(key) != sounds.end()) {
         if(key == "Move"){
-            SetMasterVolume(1.4);
+            SetMasterVolume(0.8);
         }else{
-            SetMasterVolume(1);
+            SetMasterVolume(0.6);
         }
         PlaySound(sounds[key]);
     }
