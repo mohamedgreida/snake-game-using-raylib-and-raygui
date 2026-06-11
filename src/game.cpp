@@ -36,6 +36,12 @@ void Game::SetWindow() {
     SetConfigFlags(FLAG_VSYNC_HINT);
     InitWindow(120 * cellCountX, (cellCountY + tableyoffset) * 120, "Game View");
 
+    //icon of game in taskbar
+    Image icon = LoadImage(RESOURCES_PATH "Apple.png"); 
+    SetWindowIcon(icon);
+    UnloadImage(icon);
+
+    //so that it works with any device
     int currentMonitor = GetCurrentMonitor(); 
     int monitorWidth = GetMonitorWidth(currentMonitor);
     int monitorHeight = GetMonitorHeight(currentMonitor);
@@ -44,9 +50,8 @@ void Game::SetWindow() {
     int windowWidth = cellCountX * cellSize;
     int windowX = (monitorWidth - cellSize * cellCountX) / 2;
     int windowY = (monitorHeight - (cellCountY + tableyoffset + 1) * cellSize) / 2;
-    CloseWindow();
 
-    InitWindow(cellSize * cellCountX, (cellCountY + tableyoffset) * cellSize, "Game View");
+    SetWindowSize(cellSize * cellCountX, (cellCountY + tableyoffset) * cellSize);
     SetWindowPosition(windowX, windowY);
 }
 
@@ -156,6 +161,10 @@ int Game::DrawGameOverlayMenu(const char* title, const char* subtext, Color titl
     bool middlePressed = false;
     bool rightPressed = false;
 
+    // Pointer to hold our dynamic description text
+    const char* hoverDescription = nullptr;
+    Color descriptionColor = WHITE;
+
     if (strcmp(leftBtnText, "EASY") == 0) {
         GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt(LIME));
         GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, ColorToInt(GREEN));
@@ -177,6 +186,20 @@ int Game::DrawGameOverlayMenu(const char* title, const char* subtext, Color titl
         GuiSetStyle(DEFAULT, TEXT_COLOR_NORMAL, ColorToInt(WHITE));
         rightPressed = GuiButton(rightBtnRect, rightBtnText);
 
+        Vector2 mousePos = GetMousePosition();
+        if (CheckCollisionPointRec(mousePos, leftBtnRect)) {
+            hoverDescription = "Speed: Slow | Obstacles: None";
+            descriptionColor = LIME;
+        } 
+        else if (CheckCollisionPointRec(mousePos, middleBtnRect)) {
+            hoverDescription = "Speed: Normal | Obstacles: 1 Spike";
+            descriptionColor = YELLOW;
+        } 
+        else if (CheckCollisionPointRec(mousePos, rightBtnRect)) {
+            hoverDescription = "Speed: Fast | Obstacles: 3 Spikes";
+            descriptionColor = RED;
+        }
+
     } else {
         GuiSetStyle(DEFAULT, BASE_COLOR_NORMAL, ColorToInt({ 2, 62, 138, 255 }));   
         GuiSetStyle(DEFAULT, BORDER_COLOR_NORMAL, ColorToInt(SKYBLUE));
@@ -187,6 +210,15 @@ int Game::DrawGameOverlayMenu(const char* title, const char* subtext, Color titl
         leftPressed   = GuiButton(leftBtnRect, leftBtnText);
         middlePressed = GuiButton(middleBtnRect, middleBtnText);
         rightPressed  = GuiButton(rightBtnRect, rightBtnText);
+    }
+
+    if (hoverDescription != nullptr) {
+        int descFontSize = 24;
+        int descWidth = MeasureText(hoverDescription, descFontSize);
+        float descY = btnY + btnHeight + 30; 
+        
+        DrawText(hoverDescription, screenCenterX - (descWidth / 2.0f) + 2, descY + 2, descFontSize, BLACK);
+        DrawText(hoverDescription, screenCenterX - (descWidth / 2.0f), descY, descFontSize, descriptionColor);
     }
 
     if (leftPressed || middlePressed || rightPressed) {
