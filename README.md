@@ -7,25 +7,12 @@ A modern, object-oriented 2D Snake game built using **C++**, **Raylib**, and **R
 ## 📺 Gameplay Demo
 
 ### 🟢 Easy Mode
-<p align="center">
-  <video src="resources/gameplay-demo1.mp4" width="100%" controls autoplay loop muted>
-    Your browser does not support the video tag.
-  </video>
-</p>
+
 
 ### 🟡 Medium Mode
-<p align="center">
-  <video src="resources/gameplay-demo2.mp4" width="100%" controls autoplay loop muted>
-    Your browser does not support the video tag.
-  </video>
-</p>
+
 
 ### 🔴 Hard Mode
-<p align="center">
-  <video src="resources/gameplay-demo3.mp4" width="100%" controls autoplay loop muted>
-    Your browser does not support the video tag.
-  </video>
-</p>
 
 
 ## 🎮 Game Controls
